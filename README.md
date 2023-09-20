@@ -84,3 +84,45 @@
 
 ![](https://github.com/nastyray/UserCenter/blob/main/Image/%255CUsers%255Clil%2520ray%255CAppData%255CRoaming%255CTypora%255Ctypora-user-images%255C1695194879643.png)
 
+初始化项目，在初始文件夹中执行
+
+```
+# 使用 npm
+npm i @ant-design/pro-cli -g
+pro create myapp
+```
+
+选择 umi 的版本，这里选择umi@3
+
+```
+? 🐂 使用 umi@4 还是 umi@3 ? (Use arrow keys)
+❯ umi@4
+  umi@3
+```
+
+> 如果选择了 umi@4 版本，暂时还不支持全量区块。
+
+如果选择了 umi@3，还可以选择 pro 的模板，pro 是基础模板，只提供了框架运行的基本内容，complete 包含所有区块，不太适合当基础模板来进行二次开发，我们选择simple
+
+```
+? 🚀 要全量的还是一个简单的脚手架? (Use arrow keys)
+❯ simple
+  complete
+```
+
+安装依赖：
+
+```
+$ cd myapp && tyarn
+// 或
+$ cd myapp && npm install
+```
+
+执行前端项目：
+
+https://github.com/nastyray/UserCenter/blob/main/Image/5D6H%7B7YI%7B(OTSQK9E30JJ%5BT.png
+
+通过  http://localhost:8000 在浏览器访问前端页面
+
+https://github.com/nastyray/UserCenter/blob/main/Image/V3~(LWECZEM%5BJPT(JYG_%7DK7.png
+
