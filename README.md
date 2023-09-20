@@ -120,7 +120,7 @@ $ cd myapp && npm install
 
 执行前端项目：
 
-![](https://github.com/nastyray/UserCenter/blob/main/Image/5D6H%7B7YI%7B(OTSQK9E30JJ%5BT.png?raw=true)
+![https://github.com/nastyray/UserCenter/blob/main/Image/5D6H%7B7YI%7B(OTSQK9E30JJ%5BT.png]()
 
 通过  http://localhost:8000 在浏览器访问前端页面
 
