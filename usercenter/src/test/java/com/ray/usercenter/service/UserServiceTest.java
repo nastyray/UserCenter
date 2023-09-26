@@ -35,7 +35,7 @@ public class UserServiceTest {
         user.setUserAccount("123");
         user.setAvatarUrl("https://github.com/nastyray/UserCenter/blob/main/Image/1693641416492.jpg");
         user.setGender(0);
-        user.setUserPassword("xxx");
+        user.setUserPassword("12345678");
         user.setEmail("456");
         user.setUserStatus(0);
         user.setPhone("123");
@@ -75,4 +75,5 @@ public class UserServiceTest {
         Assertions.assertEquals(-1, result);
 
     }
+
 }

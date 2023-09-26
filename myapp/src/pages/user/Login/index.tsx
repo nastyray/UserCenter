@@ -1,23 +1,17 @@
 import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
-import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import {
-  AlipayCircleOutlined,
   LockOutlined,
-  MobileOutlined,
-  TaobaoCircleOutlined,
   UserOutlined,
-  WeiboCircleOutlined,
 } from '@ant-design/icons';
 import {
   LoginForm,
-  ProFormCaptcha,
   ProFormCheckbox,
   ProFormText,
 } from '@ant-design/pro-components';
-import { Alert, message, Tabs } from 'antd';
+import {Alert, Divider, message, Space, Tabs} from 'antd';
 import React, { useState } from 'react';
-import { history, useModel } from 'umi';
+import {history, Link, useModel} from 'umi';
 import {SYSTEM_LOGO} from "@/constants";
 import styles from './index.less';
 const LoginMessage: React.FC<{
@@ -140,20 +134,27 @@ const Login: React.FC = () => {
               marginBottom: 24,
             }}
           >
-            <ProFormCheckbox noStyle name="autoLogin">
-              自动登录
-            </ProFormCheckbox>
-            <a
-              style={{
-                float: 'right',
-              }}
-              href= "https://github.com/nastyray"
-              target="_blank" rel="noreferrer"
-            >
-              忘记密码? 请联系ray
-            </a>
+            <Space split={<Divider type="vertical" />}>
+              <ProFormCheckbox noStyle name="autoLogin">
+                自动登录
+              </ProFormCheckbox>
+              {/*<Divider type="vertical"/>*/}
+              <Link to="/user/register">新用户注册</Link>
+              {/*<Divider type="vertical"/>*/}
+              <a
+                  style={{
+                    float: 'right',
+                  }}
+                  href= "https://github.com/nastyray"
+                  target="_blank" rel="noreferrer"
+              >
+                忘记密码?
+              </a>
+            </Space>
+
           </div>
         </LoginForm>
+
       </div>
       <Footer />
     </div>
