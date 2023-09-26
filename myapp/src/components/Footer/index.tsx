@@ -1,7 +1,7 @@
 import { GithubOutlined } from '@ant-design/icons';
 import { DefaultFooter } from '@ant-design/pro-components';
 const Footer: React.FC = () => {
-  const defaultMessage = '蚂蚁集团体验技术部出品';
+  const defaultMessage = 'ray出品';
   const currentYear = new Date().getFullYear();
   return (
     <DefaultFooter
@@ -15,8 +15,8 @@ const Footer: React.FC = () => {
         },
         {
           key: 'github',
-          title: <GithubOutlined />,
-          href: 'https://github.com/ant-design/ant-design-pro',
+          title: <><GithubOutlined />ray GitHub</>,
+          href: 'https://github.com/nastyray',
           blankTarget: true,
         },
         {

@@ -7,7 +7,7 @@ import type { RunTimeLayoutConfig } from 'umi';
 import { history, Link } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
-
+import { RequestConfig } from 'umi';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
@@ -16,6 +16,10 @@ export const initialStateConfig = {
   loading: <PageLoading />,
 };
 
+export const request: RequestConfig = {
+  timeout: 10000,
+
+};
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
