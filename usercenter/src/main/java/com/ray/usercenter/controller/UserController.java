@@ -74,6 +74,26 @@ public class UserController {
 
     }
 
+    /**
+     * 用户注销
+     * @param request
+     * @return
+     */
+    @PostMapping("/logout")
+    public Integer userLogout(HttpServletRequest request) {
+        if (request == null){
+            return null;
+        }
+        return userService.userLogout(request);
+
+    }
+
+
+    /**
+     * 获取当前用户信息
+     * @param request
+     * @return
+     */
     @GetMapping("/current")
     public User getCurrentUser(HttpServletRequest request){
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);

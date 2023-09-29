@@ -68,6 +68,7 @@ const Login: React.FC = () => {
     }
   };
   const { status, type: loginType } = userLoginState;
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
