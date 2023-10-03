@@ -54,8 +54,8 @@ public class UserController {
         String checkPassword = userRegisterRequest.getCheckPassword();
         String planetCode = userRegisterRequest.getPlanetCode();
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword,planetCode)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            return null;
         }
 
         long result = userService.userRegister(userAccount, userPassword, checkPassword, planetCode);
@@ -72,12 +72,13 @@ public class UserController {
     @PostMapping("/login")
     public BaseResponse<User> userLogin(@RequestBody UserLoginRequest userLoginRequest,HttpServletRequest request) {
         if (userLoginRequest == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            return ResultUtils.error(ErrorCode.PARAMS_ERROR);
         }
         String userAccount = userLoginRequest.getUserAccount();
         String userPassword = userLoginRequest.getUserPassword();
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            return ResultUtils.error(ErrorCode.PARAMS_ERROR);
         }
         User user = userService.userLogin(userAccount, userPassword, request);
         return ResultUtils.success(user);
@@ -110,7 +111,7 @@ public class UserController {
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User currentUser = (User) userObj;
         if (currentUser == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
         long userId = currentUser.getId();
         //todo 校验用户是否合法
@@ -129,7 +130,7 @@ public class UserController {
     public BaseResponse<List<User>> searchUsers(String username,HttpServletRequest request){
 
         if (!isAdmin(request)){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.NO_AUTH, "缺少管理员权限");
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNoneBlank(username)){
