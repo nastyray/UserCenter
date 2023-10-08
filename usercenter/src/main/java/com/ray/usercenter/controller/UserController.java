@@ -33,6 +33,7 @@ import static com.ray.usercenter.contant.UserContant.USER_LOGIN_STATE;
  */
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = { "http://175.178.249.250"},allowCredentials = "true")
 public class UserController {
     @Resource
     private UserService userService;
