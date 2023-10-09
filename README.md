@@ -43,14 +43,6 @@
 - Nginx
 - 容器
 
-
-
-## 项目演示
-
-![](https://github.com/nastyray/UserCenter/blob/main/Image/%E9%A1%B9%E7%9B%AE%E6%80%BB%E8%A7%88.png)
-
-
-
 ## 项目收获
 
 1. 学会前后端企业主流开发技术的应用
