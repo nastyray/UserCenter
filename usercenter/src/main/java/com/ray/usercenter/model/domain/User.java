@@ -63,6 +63,10 @@ public class User implements Serializable {
      * 创建时间
      */
     private Date createTime;
+    /**
+     * 标签列表 json
+     */
+    private String tags;
 
     /**
      * 更新时间

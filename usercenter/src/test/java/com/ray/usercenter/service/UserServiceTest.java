@@ -1,7 +1,10 @@
 package com.ray.usercenter.service;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import com.ray.usercenter.model.domain.User;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -76,5 +79,17 @@ public class UserServiceTest {
         Assertions.assertEquals(-1, result);
 
     }
+
+    @Test
+    void testSearcherUserByTags(){
+        //模拟一条数据
+        List<String> tagNameList = Arrays.asList("java", "python");
+        //调用方法查询
+        List<User> userList = userService.searcherUserByTags(tagNameList);
+        //判断是否查到
+        Assert.assertNotNull(userList);
+
+    }
+
 
 }

@@ -3,7 +3,6 @@ package com.ray.usercenter.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ray.usercenter.common.ErrorCode;
-import com.ray.usercenter.common.ResultUtils;
 import com.ray.usercenter.exception.BusinessException;
 import com.ray.usercenter.model.domain.User;
 import com.ray.usercenter.service.UserService;
@@ -11,12 +10,16 @@ import com.ray.usercenter.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.ray.usercenter.contant.UserContant.USER_LOGIN_STATE;
 
@@ -173,6 +176,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setUserRole(originUser.getUserRole());
         safetyUser.setUserStatus(originUser.getUserStatus());
         safetyUser.setCreateTime(originUser.getCreateTime());
+        safetyUser.setTags(originUser.getTags());
         return safetyUser;
     }
 
@@ -185,6 +189,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //移除登录态
         request.getSession().removeAttribute(USER_LOGIN_STATE);
         return 1;
+
+    }
+
+    /**
+     * 根据标签搜索用户
+     * @param tagNameList
+     * @return
+     */
+    @Override
+    public List<User> searcherUserByTags(List<String> tagNameList){
+        //1.先判断是否为空，不能让用户什么都不输入，就查到所有信息
+        if (CollectionUtils.isEmpty(tagNameList)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        //2.开始查询
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        //拼接 and 查询
+        // like '%java%' and like '%Python%'
+        for (String tagName : tagNameList){
+            queryWrapper = queryWrapper.like("tags",tagName);
+        }
+        List<User> userList = userMapper.selectList(queryWrapper);
+//        脱敏
+        return userList.stream().map(this::getsafetyUser).collect(Collectors.toList());
 
     }
 }
