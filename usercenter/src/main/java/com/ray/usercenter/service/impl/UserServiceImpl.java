@@ -2,6 +2,8 @@ package com.ray.usercenter.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ray.usercenter.common.ErrorCode;
 import com.ray.usercenter.exception.BusinessException;
 import com.ray.usercenter.model.domain.User;
@@ -15,12 +17,12 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.ray.usercenter.contant.UserContant.ADMIN_ROLE;
 import static com.ray.usercenter.contant.UserContant.USER_LOGIN_STATE;
 
 /**
@@ -204,18 +206,99 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         //2.开始查询
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        //拼接 and 查询
-        // like '%java%' and like '%Python%'
-        for (String tagName : tagNameList){
-            queryWrapper = queryWrapper.like("tags",tagName);
-        }
-        List<User> userList = userMapper.selectList(queryWrapper);
+//        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+//        //拼接 and 查询
+//        // like '%java%' and like '%Python%'
+//        for (String tagName : tagNameList){
+//            queryWrapper = queryWrapper.like("tags",tagName);
+//        }
+//        List<User> userList = userMapper.selectList(queryWrapper);
 //        脱敏
-        return userList.stream().map(this::getsafetyUser).collect(Collectors.toList());
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        List<User> userList = userMapper.selectList(queryWrapper);
+        Gson gson = new Gson();
+        //2.判断内存中是否包含要求的标签
+        return userList.stream().filter(user -> {
+            String tagstr = user.getTags();
+            if (StringUtils.isBlank(tagstr)){
+                return false;
+            }
+            Set<String> tempTagNameSet = gson.fromJson(tagstr,new TypeToken<Set<String>>(){}.getType());
+            tempTagNameSet = Optional.ofNullable(tempTagNameSet).orElse(new HashSet<>());
+            for (String tagName : tagNameList){
+                if (!tempTagNameSet.contains(tagName)){
+                    return false;
+                }
+            }
+            return true;
+        }).map(this::getsafetyUser).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取当前登录用户信息
+     * @param request
+     * @return
+     */
+    @Override
+    public User getLoginUser(HttpServletRequest request) {
+        if (request == null){
+            return null;
+        }
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        return (User) userObj;
+    }
+
+    /**
+     * 修改用户信息
+     * @param user
+     * @param loginUser
+     * @return
+     */
+    @Override
+    public int updateUser(User user, User loginUser) {
+        long userId = user.getId();
+        if (userId <= 0){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        //如果是管理员，允许更新任意用户
+        //如果不是管理员，只允许更新自己的信息
+        if (!isAdmin(loginUser) && userId != loginUser.getId()){
+            throw new BusinessException(ErrorCode.NO_AUTH);
+        }
+        User userold = userMapper.selectById(userId);
+        if (userold == null){
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        return userMapper.updateById(user);
 
     }
+
+    /**
+     * 是否为管理员
+     *
+     * @param request
+     * @return
+     */
+    public boolean isAdmin(HttpServletRequest request) {
+        // 仅管理员可查询
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User user = (User) userObj;
+        return user != null && user.getUserRole() == ADMIN_ROLE;
+    }
+
+    /**
+     * 是否为管理员
+     *
+     * @param loginUser
+     * @return
+     */
+    public boolean isAdmin(User loginUser) {
+        return loginUser != null && loginUser.getUserRole() == ADMIN_ROLE;
+    }
+
+
 }
+
 
 
 
